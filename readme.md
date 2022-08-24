@@ -1,1 +1,1 @@
-<img src="assets/go-git-local.png" width="600px">
+<img src="assets/go-git-local.png" width="500px">
