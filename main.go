@@ -17,13 +17,13 @@ import (
 )
 
 func loadUI() fyne.CanvasObject{
+	// Input
 	pathInput := widget.NewEntry()
 	pathInput.SetPlaceHolder("Enter path...")
 
+	// PathList
 	searchPath := "./"
-
-	paths := getGitFiles(searchPath)
-
+	paths, output := getGitFiles(searchPath)
 	pathList := widget.NewList(
 		func() int {
 			return len(paths)
@@ -39,53 +39,45 @@ func loadUI() fyne.CanvasObject{
 	btn := widget.NewButton("search", func() {
 		log.Println("tapped")
 		searchPath = pathInput.Text
-		paths = getGitFiles(searchPath)
+		paths, output = getGitFiles(searchPath)
 		pathList.Refresh()
 	})
 
+	// View
 	contentText := widget.NewLabel("Please select a path")
-
 	search := container.NewGridWithRows(2, pathInput, btn)
-
 	view := container.New(layout.NewBorderLayout(contentText, search, nil, nil),
 	search, contentText, pathList)
 
 	// Select Path
 	pathList.OnSelected = func(id widget.ListItemID) {
-		contentText.Text = paths[id]
+		contentText.Text = output[id]
 		contentText.Refresh()
 	}
-
 	return view
 }
 
-func getGitFiles(path string) (paths []string) {
+func getGitFiles(path string) (paths []string, output []string) {
     fsys := os.DirFS(path)
-	paths = []string{"test1", "test2" }
-
     fs.WalkDir(fsys, ".", func(p string, d fs.DirEntry, err error) error {
         if filepath.Ext(p) == ".git" {
-			active := "%cn %h %cd"
+			info := "Last commit: \n %cn on %cd"
 			gitPath := path + "/" + p
-			cmd := exec.Command("git", "log", "--pretty=format:"+active)
+			cmd := exec.Command("git", "log", "-1", "--stat", "--pretty=format:"+info)
 			cmd.Dir = gitPath
 			out, err := cmd.Output()
-
-			fmt.Println((string(out)))
 			fmt.Println((err))
-
+			output = append(output, string(out))
 			paths = append(paths, p)
         }
         return nil
     })
-    return paths
+    return paths, output
 }
 
-
 func main(){
-	fmt.Println("searching...")
 	a:= app.New()
-	w:= a.NewWindow("GoGitLocal")
+	w:= a.NewWindow("go-git-local")
 	w.Resize(fyne.NewSize(800, 800))
 	w.SetContent(loadUI())
 	w.ShowAndRun()
