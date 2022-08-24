@@ -1,1 +1,1 @@
-![Screenshot](assets/go-git-local.png)
+![Screenshot](assets/go-git-local.png =100x20)
