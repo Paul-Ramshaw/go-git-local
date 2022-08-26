@@ -64,7 +64,7 @@ func getGitFiles(path string) (paths []string, output []string) {
     fsys := os.DirFS(path)
     fs.WalkDir(fsys, ".", func(p string, d fs.DirEntry, err error) error {
         if filepath.Ext(p) == ".git" {
-			info := "Last commit: \n %cn on %cd"
+			info := "%s %n %ar %n %cn"
 			gitPath := path + "/" + p
 			cmd := exec.Command("git", "log", "-1", "--stat", "--pretty=format:"+info)
 			cmd.Dir = gitPath
