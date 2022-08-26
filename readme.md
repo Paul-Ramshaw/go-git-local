@@ -1,8 +1,6 @@
 # go-git-local
 
-This project provides a GUI for viewing local git projects. It allows you to search a directory for git projects.
-
-It is written in Go and uses the Fyne GUI toolkit.
+go-git-local provides a GUI for viewing local git projects. It currently allows you to search a directory for git projects and then view a summary of the last commit for that project. It's written in Go and uses the Fyne GUI toolkit.
 
 <img src="assets/go-git-local.png" width="500px">
 
@@ -27,3 +25,7 @@ $ cd go-git-local
 ```
 $ go run main.go
 ```
+
+## Usage
+
+By default go-git-local will search its parent directory for git projects. To search a different folder provide a relative path in the search input and click "search". If any git projects are found, they'll be displayed in a list. Select a project from the list to view a summary of the last commit for that project.

@@ -1,4 +1,4 @@
-module gitlocal
+module go-git-local
 
 go 1.19
 
