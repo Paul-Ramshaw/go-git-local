@@ -21,6 +21,8 @@ func loadUI() fyne.CanvasObject{
 	pathInput := widget.NewEntry()
 	pathInput.SetPlaceHolder("Enter path...")
 
+	contentText := widget.NewLabel("Please select a path")
+
 	// PathList
 	searchPath := "./"
 	paths, output := getGitFiles(searchPath)
@@ -38,13 +40,16 @@ func loadUI() fyne.CanvasObject{
 	// Search Button
 	btn := widget.NewButton("search", func() {
 		log.Println("tapped")
+		contentText.Text = "Loading..."
+		contentText.Refresh()
 		searchPath = pathInput.Text
 		paths, output = getGitFiles(searchPath)
+		contentText.Text = output[0]
+		contentText.Refresh()
 		pathList.Refresh()
 	})
 
 	// View
-	contentText := widget.NewLabel("Please select a path")
 	search := container.NewGridWithRows(2, pathInput, btn)
 	view := container.New(layout.NewBorderLayout(contentText, search, nil, nil),
 	search, contentText, pathList)
@@ -66,7 +71,9 @@ func getGitFiles(path string) (paths []string, output []string) {
 			cmd := exec.Command("git", "log", "-1", "--stat", "--pretty=format:"+info)
 			cmd.Dir = gitPath
 			out, err := cmd.Output()
-			fmt.Println((err))
+			if err != nil {
+				fmt.Println(err)
+			}
 			output = append(output, string(out))
 			paths = append(paths, p)
         }
