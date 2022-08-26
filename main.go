@@ -24,7 +24,7 @@ func loadUI() fyne.CanvasObject{
 	contentText := widget.NewLabel("Please select a path")
 
 	// PathList
-	searchPath := "./"
+	searchPath := "../"
 	paths, output := getGitFiles(searchPath)
 	pathList := widget.NewList(
 		func() int {
