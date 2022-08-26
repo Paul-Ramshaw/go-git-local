@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"os/exec"
@@ -39,7 +38,6 @@ func loadUI() fyne.CanvasObject{
 
 	// Search Button
 	btn := widget.NewButton("search", func() {
-		log.Println("tapped")
 		contentText.Text = "Loading..."
 		contentText.Refresh()
 		searchPath = pathInput.Text
@@ -72,7 +70,7 @@ func getGitFiles(path string) (paths []string, output []string) {
 			cmd.Dir = gitPath
 			out, err := cmd.Output()
 			if err != nil {
-				fmt.Println(err)
+				log.Println(err)
 			}
 			output = append(output, string(out))
 			paths = append(paths, p)
